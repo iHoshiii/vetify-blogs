@@ -11,6 +11,7 @@ import type { Screen } from './moderation/service.js'
 import { createIdentityCheck } from './auth/identity.js'
 import { sessionReader } from './auth/session.js'
 import { authRouter } from './auth/oidc.js'
+import { persistentLimit } from './limits.js'
 
 export function createApp(config: Config, store: Store, overrides: { authenticate?: Authenticate; screen?: Screen } = {}) {
   const app = express()
@@ -26,6 +27,7 @@ export function createApp(config: Config, store: Store, overrides: { authenticat
   })
   app.use(express.json({ limit: '512kb' }))
   app.use(cookieParser())
+  app.use(persistentLimit(store.db))
   const check = createIdentityCheck(config)
   const authenticate = overrides.authenticate ?? sessionReader(store.db, config, check)
   app.get('/api/health', async (_req, res) => {

@@ -15,7 +15,7 @@ export async function connectDatabase(uri: string) {
   const db = client.db()
   await db.collection('blogs').createIndexes(BLOG_INDEXES)
   await db.collection('blog_audit').createIndex({ targetId: 1, at: -1 })
-  for (const name of ['blog_sessions', 'blog_auth_flows']) {
+  for (const name of ['blog_sessions', 'blog_auth_flows', 'blog_limits']) {
     await db.collection(name).createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
   }
   return { client, db }

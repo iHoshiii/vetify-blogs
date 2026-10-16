@@ -57,7 +57,7 @@ export class Store {
             ...(patch.status === 'published' && !current.publishedAt ? { publishedAt: now } : {}) },
           $inc: { revision: 1 } }, { session, returnDocument: 'after' })
         if (!updated) throw new HttpError(409, 'Post changed. Reload before retrying.')
-        await this.audit(current, updated.status, actor, action, reason, session)
+        await this.audit(current, updated.status, actor, action, reason, session, updated.moderation)
         return updated
       })
     } finally { await session.endSession() }
@@ -73,9 +73,9 @@ export class Store {
     } finally { await session.endSession() }
   }
   private async audit(post: Post, statusTo: string, actor: string, action: string,
-    reason: string | null, session: ClientSession) {
+    reason: string | null, session: ClientSession, screening = post.moderation) {
     await this.audits.insertOne({ _id: new ObjectId(), action, targetId: post._id,
-      actor: new ObjectId(actor), reason, at: new Date(), metadata: { slug: post.slug, title: post.title,
+      actor: new ObjectId(actor), reason, at: new Date(), screening, metadata: { slug: post.slug, title: post.title,
         authorId: post.author.toHexString(), statusFrom: post.status, statusTo } }, { session })
   }
 }

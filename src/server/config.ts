@@ -20,7 +20,7 @@ const schema = z.object({
   GEMINI_MODERATION_MODEL: z.string().min(1).default('gemini-3.5-flash'),
 }).superRefine((env, ctx) => {
   const issue = (message: string) => ctx.addIssue({ code: 'custom', message })
-  const dbName = new URL(env.MONGODB_URI.replace(/^mongodb(?:\+srv)?:/, 'http:')).pathname.slice(1)
+  const dbName = env.MONGODB_URI.match(/^mongodb(?:\+srv)?:\/\/[^/]+\/([^/?]+)(?:\?|$)/)?.[1]
   if (!dbName || /^(admin|local|config|vetify)$/i.test(dbName)) issue('Choose a separate named Blog database')
   if (new URL(env.AUTH_CALLBACK_URL).origin !== env.CLIENT_ORIGIN) issue('Callback must belong to CLIENT_ORIGIN')
   if (env.AUTH_ENABLED && !/^[a-f0-9]{64}$/i.test(env.AUTH_SESSION_KEY)) issue('SSO needs an independent 32-byte hex session key')

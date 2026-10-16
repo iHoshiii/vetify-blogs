@@ -29,4 +29,5 @@ export type Audit = {
   reason: string | null
   at: Date
   metadata: { slug: string; title: string; authorId: string; statusFrom: BlogStatus; statusTo: string }
+  screening: Post['moderation']
 }

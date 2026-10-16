@@ -5,15 +5,16 @@ import { BlockList } from 'node:net'
 import { safeHttps } from '../../shared/schemas.js'
 
 const blocked = new BlockList()
+const blockedV6 = new BlockList()
 for (const [ip, prefix] of [['0.0.0.0', 8], ['10.0.0.0', 8], ['100.64.0.0', 10],
   ['127.0.0.0', 8], ['169.254.0.0', 16], ['172.16.0.0', 12], ['192.168.0.0', 16],
   ['192.0.0.0', 24], ['192.0.2.0', 24], ['198.18.0.0', 15], ['198.51.100.0', 24],
   ['203.0.113.0', 24], ['224.0.0.0', 4], ['240.0.0.0', 4]] as const) blocked.addSubnet(ip, prefix, 'ipv4')
 for (const [ip, prefix] of [['::', 128], ['::1', 128], ['fc00::', 7], ['fe80::', 10],
   ['ff00::', 8], ['2001:db8::', 32], ['::ffff:0:0', 96], ['64:ff9b::', 96],
-  ['2002::', 16]] as const) blocked.addSubnet(ip, prefix, 'ipv6')
-export const isPublicAddress = (ip: string) => Boolean(isIP(ip)) &&
-  !blocked.check(ip, isIP(ip) === 6 ? 'ipv6' : 'ipv4')
+  ['2002::', 16], ['::', 96]] as const) blockedV6.addSubnet(ip, prefix, 'ipv6')
+export const isPublicAddress = (ip: string) => isIP(ip) === 4 ? !blocked.check(ip, 'ipv4') :
+  isIP(ip) === 6 && !blockedV6.check(ip, 'ipv6')
 export function imageMime(bytes: Buffer): string | null {
   if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return 'image/png'
   if (bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255) return 'image/jpeg'
