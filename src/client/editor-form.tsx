@@ -4,7 +4,7 @@ import type { Blog } from '../shared/types.js'
 import { api } from './api.js'
 import { BlogBody } from './components.js'
 
-export function EditorForm({ post, onSave }: { post?: Blog; onSave: () => void }) {
+export function EditorForm({ post, onSave, readOnly = false }: { post?: Blog; onSave: () => void; readOnly?: boolean }) {
   const navigate = useNavigate()
   const [body, setBody] = useState(post?.body ?? '')
   const [preview, setPreview] = useState(false)
@@ -37,7 +37,7 @@ export function EditorForm({ post, onSave }: { post?: Blog; onSave: () => void }
       <h1>{post ? 'Edit your article.' : 'Make a little knowledge go further.'}</h1></div>
       {post && <span className={`status ${post.status}`}>{post.status}</span>}</div>
     {moderated && <p className="notice">This post is under moderation. Only administrators can revise its text, and publication requires a moderation decision.</p>}
-    <fieldset disabled={busy}>
+    <fieldset disabled={busy || readOnly}>
       <label>Title<input name="title" required minLength={3} maxLength={160} defaultValue={post?.title} /></label>
       <label>Short introduction<textarea name="excerpt" rows={3} required minLength={10} maxLength={320} defaultValue={post?.excerpt} /></label>
       <label>Cover image URL<input name="coverUrl" type="url" pattern="https://.*" maxLength={2048} placeholder="https://..." defaultValue={post?.coverUrl ?? ''} /></label>
