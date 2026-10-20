@@ -16,7 +16,8 @@ encrypted sessions and short-lived authentication state only.
    Use the configured hostname consistently because cookies are host scoped.
 5. Run `npm run build` to build both applications. `npm start` starts the
    built API on loopback. Serve `dist/client` with SPA fallback and proxy `/api`
-   to the API. No hosting resources or deployment are included.
+   to the API. For Vercel and production configuration, see
+   [the deployment guide](docs/DEPLOYMENT.md).
 
 The database starts empty. No seed, migration or live content operation runs
 automatically. Missing Gemini settings hold publication attempts privately for
@@ -56,9 +57,10 @@ Browser tests require a Playwright Chromium installation.
 
 ## Repository workflow
 
-`main` contains the initial requirements. `dev` is the development base.
-Implementation is committed on `feat/independent-blog` for review and integration
-into `dev`. Commits use the conventions in `AGENT.MD`.
+Development uses scope-specific branches. Merge the application and production
+setup into `main` to release. Only pushes to `main` trigger testing followed by
+the Vercel production deployment. See [the deployment guide](docs/DEPLOYMENT.md)
+for required Vercel variables, GitHub secrets and Name.com DNS records.
 
 See [port manifest](docs/PORT_MANIFEST.md), [external contracts](docs/CONTRACTS.md),
 [migration proposal](docs/MIGRATION.md) and [validation](docs/VALIDATION.md).
