@@ -1,10 +1,9 @@
 node_modules/
 dist/
-.env
-.env.*
+.env*
 !.env.example
 !.env.production.example
-.vercel/
+.vercel
 /[Aa][Gg][Ee][Nn][Tt].[Mm][Dd]
 /[Aa][Gg][Ee][Nn][Tt][Ss].[Mm][Dd]
 /[Aa][Gg][Ee][Nn][Dd].[Mm][Dd]
