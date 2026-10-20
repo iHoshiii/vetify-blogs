@@ -23,6 +23,14 @@ describe('Vercel API entry point', () => {
     expect((await request(handler).get('/api/missing')).status).toBe(404)
   })
 
+  it('keeps separate login rate limits for clients behind the Vercel proxy', async () => {
+    const handler = createServerlessHandler(async () => createApp(config, db.store))
+    for (const ip of ['198.51.100.1', '198.51.100.2']) {
+      expect((await request(handler).get('/api/v1/auth/login').set('X-Forwarded-For', ip)).status).toBe(503)
+    }
+    expect(await db.store.db.collection('blog_limits').countDocuments()).toBe(2)
+  })
+
   it('returns an uncached error without exposing secrets and retries failed initialization', async () => {
     const start = vi.fn().mockRejectedValueOnce(new Error('private database credentials'))
       .mockResolvedValue(createApp(config, db.store))

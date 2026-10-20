@@ -13,7 +13,9 @@ async function initialize() {
 export function createServerlessHandler(start = initialize) {
   let pending: ReturnType<typeof initialize> | undefined
   return async (req: IncomingMessage, res: ServerResponse) => {
-    pending ??= start().catch(error => { pending = undefined; throw error })
+    // Vercel overwrites X-Forwarded-For with the connecting client's address.
+    pending ??= start().then(app => app.set('trust proxy', 1))
+      .catch(error => { pending = undefined; throw error })
     try {
       const app = await pending
       app(req, res)
