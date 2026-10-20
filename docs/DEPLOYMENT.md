@@ -98,14 +98,20 @@ from `main`. Add these environment secrets, or use repository Actions secrets:
 To link locally and obtain the IDs:
 
 ```powershell
-npx vercel@64.7.0 login
-npx vercel@64.7.0 link
+npm install --global vercel@64.7.0
+vercel --version
+vercel login
+vercel link
 ```
 
 Select the existing Blog project. `.vercel/` is ignored. Application secrets such
 as `MONGODB_URI` belong in Vercel, not in the workflow YAML. The deployment job
 pulls Production configuration from Vercel. See
 [Vercel's GitHub Actions guide](https://vercel.com/kb/guide/how-can-i-use-github-actions-with-vercel).
+
+On Windows with Node 24 and npm 11.6.2, `npx` can fail with `ECOMPROMISED: Lock
+compromised` while installing packages. The global install above bypasses that
+`npx` lock path. See [the npm issue](https://github.com/npm/cli/issues/8710).
 
 ## Name.com DNS for the .page domain
 
