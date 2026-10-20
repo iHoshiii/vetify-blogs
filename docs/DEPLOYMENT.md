@@ -92,8 +92,8 @@ from `main`. Add these environment secrets, or use repository Actions secrets:
 | GitHub secret | Where to get it |
 | --- | --- |
 | `VERCEL_TOKEN` | Create an access token at [Vercel account tokens](https://vercel.com/account/tokens) with access to the team owning this project. |
-| `VERCEL_ORG_ID` | Vercel team/account ID, available as `orgId` in `.vercel/project.json` after linking. |
-| `VERCEL_PROJECT_ID` | Vercel project ID, available as `projectId` in `.vercel/project.json` after linking. |
+| `VERCEL_ORG_ID` | `orgId` in `.vercel/project.json`, or the Blog project's `orgId` in `.vercel/repo.json` for repository links. |
+| `VERCEL_PROJECT_ID` | `projectId` in `.vercel/project.json`, or the Blog project's `id` in `.vercel/repo.json` for repository links. |
 
 To link locally and obtain the IDs:
 
