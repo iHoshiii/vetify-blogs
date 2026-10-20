@@ -1,0 +1,15 @@
+.env
+.env.*
+.git
+.github
+node_modules
+dist
+tests
+test-results
+playwright-report
+coverage
+docs
+AGENT.MD
+AGENTS.md
+agend.md
+CLAUDE.md

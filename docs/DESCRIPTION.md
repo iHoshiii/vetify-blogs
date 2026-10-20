@@ -1,8 +1,10 @@
 # Vetify Blog: application description
 
-Updated 14 October 2026. Repository folder: `vetify-blogs`. The repository
-currently contains setup documentation/prompt; independent implementation and
-integration remain to be ported and tested.
+Updated 16 October 2026. Repository folder: `vetify-blogs`. Independent client,
+API, authoring and moderation are implemented on `feat/independent-blog`.
+Public reading works independently. Shared main sign-in remains blocked by
+main's pending web SSO and version 2 introspection contract. See
+[validation](VALIDATION.md) for the checks performed and remaining integration work.
 
 ## Purpose and users
 
