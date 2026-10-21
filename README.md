@@ -34,7 +34,7 @@ login, account database, password handling or email-based account linking.
 After joint integration testing, register the exact callback with main and set
 `AUTH_ENABLED=true` with an independent random 32-byte hex `AUTH_SESSION_KEY`.
 The default callback is `http://localhost:5177/auth/callback`. Production proposal:
-`https://blog.vetify.page/auth/callback`. The callback UI forwards the code to
+`https://blogs.vetify.page/auth/callback`. The callback UI forwards the code to
 the server, which exchanges it once and issues a host-only HttpOnly cookie.
 Tokens remain encrypted server-side. Every protected request checks main online.
 Sign out of Blog is local. Main must enforce global revocation through introspection.

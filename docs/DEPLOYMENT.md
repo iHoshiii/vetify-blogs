@@ -1,6 +1,6 @@
 # Production deployment
 
-The blog is `https://blog.vetify.page`. The separate main application is
+The blog is `https://blogs.vetify.page`. The separate main application is
 `https://vetify.page`. This project deploys both the Vite frontend and Express API
 to one Vercel project. `/api/*` reaches the API function, while frontend deep links
 such as `/blogs` and `/auth/callback` reach the React application.
@@ -26,11 +26,12 @@ remain possible and do not run this workflow. See [Vercel Git configuration](htt
 
 1. Create a Vercel project for `iHoshiii/vetify-blogs`, with the repository root
    as Root Directory. Use the **Vite** preset and **Node.js 24.x**.
-2. Use the checked-in settings: install `npm ci`, build `npm run build`, output
-   `dist/client`. The `api/index.ts` function hosts Express without a port listener.
+2. Use the checked-in settings: install `npm ci --include=dev`, build `npm run build`, output
+   `dist/client`. Including dev dependencies keeps Vite and TypeScript available
+   when `NODE_ENV=production`. `api/index.ts` hosts Express without a port listener.
 3. Set the Production Branch to `main`. Configure the environment variables below
    under Project Settings -> Environment Variables, scoped to **Production**.
-4. Add `blog.vetify.page` under Project Settings -> Domains.
+4. Add `blogs.vetify.page` under Project Settings -> Domains.
 5. Configure GitHub credentials below before pushing these changes to `main`.
    Importing a project can create an initial deployment. Do not treat that initial
    import as a tested release. The workflow controls subsequent releases.
@@ -47,8 +48,8 @@ in Vercel, or import the file using Vercel's environment variable UI.
 | `NODE_ENV` | `production`. Vercel supplies this for production builds/runtime. Keep it in the local file for standalone API operation. |
 | `MONGODB_URI` | `mongodb+srv://USER:URL_ENCODED_PASSWORD@CLUSTER/vetify_blog_production?retryWrites=true&w=majority`. Use your Atlas database user and driver connection string. Secret, server only. |
 | `MAIN_AUTH_ORIGIN` | `https://vetify.page`. Main app origin, with no path, query or fragment. Production validation requires HTTPS even while SSO is disabled. |
-| `CLIENT_ORIGIN` | `https://blog.vetify.page`. Exact browser origin used for CORS and write-request checks. No path or trailing slash. |
-| `AUTH_CALLBACK_URL` | `https://blog.vetify.page/auth/callback`. Must belong to `CLIENT_ORIGIN` and exactly match the callback registered with main. |
+| `CLIENT_ORIGIN` | `https://blogs.vetify.page`. Exact browser origin used for CORS and write-request checks. No path or trailing slash. |
+| `AUTH_CALLBACK_URL` | `https://blogs.vetify.page/auth/callback`. Must belong to `CLIENT_ORIGIN` and exactly match the callback registered with main. |
 | `AUTH_CLIENT_ID` | `vetify-blog`. Must match the client registration and token audience on main when SSO is enabled. This is not a client secret. |
 | `AUTH_ENABLED` | `false` for the current integration. Set to `true` only after main supports the OIDC/PKCE and version 2 introspection contract and joint testing passes. |
 | `AUTH_SESSION_KEY` | Leave empty while SSO is off. Before enabling SSO, generate a unique 64-character hex value using the command below. Secret, server only. |
@@ -115,12 +116,12 @@ compromised` while installing packages. The global install above bypasses that
 
 ## Name.com DNS for the .page domain
 
-1. Add `blog.vetify.page` to the Blog Vercel project's Domains first.
+1. Add `blogs.vetify.page` to the Blog Vercel project's Domains first.
 2. If Name.com hosts your authoritative DNS, open Name.com -> My Domains ->
    `vetify.page` -> Manage DNS Records. If another provider hosts DNS, edit there.
-3. Add a **CNAME**, Host **blog**, Answer **the exact target shown by Vercel**.
+3. Add a **CNAME**, Host **blogs**, Answer **the exact target shown by Vercel**.
    Use a hostname only, with no `https://` or path. Remove conflicting records
-   for the same `blog` host. Preserve main's apex, mail and verification records.
+   for the same `blogs` host. Preserve main's apex, mail and verification records.
 4. Add a TXT verification record if Vercel requests one. Wait for the domain
    configuration and HTTPS certificate to become valid in Vercel.
 5. `vetify.page` belongs to the main app. If setting it up separately, add it
@@ -135,7 +136,7 @@ and [Name.com CNAME instructions](https://www.name.com/support/articles/11500489
 Merge the implementation and this branch into `main`; the repository's original
 `main` does not yet contain the full app. Watch Testing and Production in Actions.
 After deployment, open `/blogs`, refresh a deep link, and request
-`https://blog.vetify.page/api/health` and `/api/v1/blogs`. Health should return
+`https://blogs.vetify.page/api/health` and `/api/v1/blogs`. Health should return
 `status: "ok"` and `authConfigured: false`. The feed starts empty.
 Sign-in and author/admin operations remain unavailable until the main auth
 contract is implemented. See [the integration requirements](CONTRACTS.md).
